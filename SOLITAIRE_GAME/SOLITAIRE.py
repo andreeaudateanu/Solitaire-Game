@@ -1,19 +1,20 @@
 """
 Solitaire clone.
 """
+"""
+Solitaire clone.
+"""
 import random
 from typing import Optional
-
 import arcade
-import os
 
 
-# Screen title and size
+# Titlul ecranului și dimensiunea
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 SCREEN_TITLE = "Drag and Drop Cards"
 
-# Define constants for button size and position
+# Definire constante pentru caracteristici buton
 BUTTON_WIDTH = 50
 BUTTON_HEIGHT = 50
 BUTTON_POSITION_X = SCREEN_WIDTH - BUTTON_WIDTH
@@ -31,46 +32,45 @@ RULES_TEXT = [
 ]
 
 
-# Constants for sizing
+# Constanta scalare
 CARD_SCALE = 0.6
 
-# How big are the cards?
+# Dimensiune cărți
 CARD_WIDTH = 140 * CARD_SCALE
 CARD_HEIGHT = 190 * CARD_SCALE
 
-# How big is the mat we'll place the card on?
+# Dimnsiune mat
 MAT_PERCENT_OVERSIZE = 1.25
 MAT_HEIGHT = int(CARD_HEIGHT * MAT_PERCENT_OVERSIZE)
 MAT_WIDTH = int(CARD_WIDTH * MAT_PERCENT_OVERSIZE)
 
-# How much space do we leave as a gap between the mats?
-# Done as a percent of the mat size.
+# Spatiere
 VERTICAL_MARGIN_PERCENT = 0.10
 HORIZONTAL_MARGIN_PERCENT = 0.10
 
-# The Y of the bottom row (2 piles)
+# Axa Y a rândului de jos (2 piloane)
 BOTTOM_Y = MAT_HEIGHT / 2 + MAT_HEIGHT * VERTICAL_MARGIN_PERCENT
 
-# The X of where to start putting things on the left side
+# Axa X pentru aliniere la stânga
 START_X = MAT_WIDTH / 2 + MAT_WIDTH * HORIZONTAL_MARGIN_PERCENT
 
-# Card constants
+# Vectori pentru cărți
 CARD_VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 CARD_SUITS = ["Clubs", "Hearts", "Spades", "Diamonds"]
 
-# The Y of the top row (4 piles)
+# Axa Y a randului de sus (4 piloane)
 TOP_Y = SCREEN_HEIGHT - MAT_HEIGHT / 2 - MAT_HEIGHT * VERTICAL_MARGIN_PERCENT
 
-# The Y of the middle row (7 piles)
+# Axa Y a randului din mijloc ( 7 piloane)
 MIDDLE_Y = TOP_Y - MAT_HEIGHT - MAT_HEIGHT * VERTICAL_MARGIN_PERCENT
 
-# How far apart each pile goes
+# Spatiere intre mat-uri
 X_SPACING = MAT_WIDTH + MAT_WIDTH * HORIZONTAL_MARGIN_PERCENT
 
-# If we fan out cards stacked on each other, how far apart to fan them?
+# spatiere intre cărți
 CARD_VERTICAL_OFFSET = CARD_HEIGHT * CARD_SCALE * 0.3
 
-# Constants that represent "what pile is what" for the game
+# Cconstante pile-uri
 PILE_COUNT = 13
 BOTTOM_FACE_DOWN_PILE = 0
 BOTTOM_FACE_UP_PILE = 1
@@ -86,7 +86,7 @@ TOP_PILE_2 = 10
 TOP_PILE_3 = 11
 TOP_PILE_4 = 12
 
-# Face down image
+# imagine pentru spatele cărții
 FACE_DOWN_IMAGE = ":resources:images/cards/cardBack_blue2.png"
 
 HINT_BUTTON_SIZE = 50
@@ -99,11 +99,11 @@ class Card(arcade.Sprite):
     def __init__(self, suit, value, scale=1):
         """ Card constructor """
 
-        # Attributes for suit and value
+        # atribute pentru simbol și valoare
         self.suit = suit
         self.value = value
 
-        # Image to use for the sprite when face up
+        # imagini pentru partea din față a cărții
         self.image_file_name = f":resources:images/cards/card{self.suit}{self.value}.png"
 
         self.is_face_up = False
@@ -142,22 +142,22 @@ class Card(arcade.Sprite):
 
 class HintButton:
     def __init__(self):
-        self.is_visible = True  # Hint button is always visible
+        self.is_visible = True  # butonul de Hint este intotdeauna vizibil
         self.is_clicked = False
         self.image = arcade.load_texture(":resources:onscreen_controls/flat_dark/key_square.png")
         self.hint_text = ""
         self.clicked_flag = False
     def draw(self):
-        # Draw button rectangle
+        # creare patrat buton
         arcade.draw_texture_rectangle(HINT_BUTTON_POSITION_X, HINT_BUTTON_POSITION_Y, HINT_BUTTON_SIZE,
                                       HINT_BUTTON_SIZE, self.image)
 
-        # Draw button text
+        # creare text buton
         arcade.draw_text("HINT", HINT_BUTTON_POSITION_X, HINT_BUTTON_POSITION_Y - 40,
                          arcade.color.WHITE, font_size=14, anchor_x="center", anchor_y="center")
 
     def check_click(self, x, y):
-        # Check if the click is within the button area
+        # verificare click - in aria butonului
         if HINT_BUTTON_POSITION_X - HINT_BUTTON_SIZE / 2 <= x <= HINT_BUTTON_POSITION_X + HINT_BUTTON_SIZE / 2 \
                 and HINT_BUTTON_POSITION_Y - HINT_BUTTON_SIZE / 2 <= y <= HINT_BUTTON_POSITION_Y + HINT_BUTTON_SIZE / 2:
             self.is_clicked = True
@@ -174,21 +174,21 @@ class HintButton:
         window_x = (SCREEN_WIDTH - window_width) / 2
         window_y = (SCREEN_HEIGHT - window_height) / 2
 
-        # Draw semi-transparent background rectangle covering the entire window
+        # fundal semi-transparent pe toată suprafața ecranului
         arcade.draw_rectangle_filled(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                      SCREEN_WIDTH, SCREEN_HEIGHT,
                                      (128, 128, 128, 200))  # Gri cu opacitate semi-transparenta
 
-        # Draw hint window
+        # fereastră pentru hint
         arcade.draw_rectangle_filled(window_x + window_width / 2, window_y + window_height / 2,
                                      window_width, window_height,
                                      (124, 149, 149,255))  # Verde cu opacitate completă
 
-        # Draw hint text
+        # hint text
         arcade.draw_text(self.hint_text, window_x + window_width / 2, window_y + window_height -  50,
                          arcade.color.BLACK, font_size=14, anchor_x="center", anchor_y="center")
 
-        # Draw close button (X)
+        # buton de inchidere (X)
         close_button_size = 20
         close_button_x = window_x + window_width - close_button_size / 2 - 5
         close_button_y = window_y + window_height - close_button_size / 2 - 5
@@ -209,15 +209,15 @@ class RuleButton:
 
 
     def draw(self):
-        # Draw button rectangle
+        # creare patrat buton
         arcade.draw_texture_rectangle(BUTTON_POSITION_X, BUTTON_POSITION_Y, BUTTON_WIDTH, BUTTON_HEIGHT, self.image)
 
-        # Draw button text
+        # creare text buton
         arcade.draw_text("RULES", BUTTON_POSITION_X, BUTTON_POSITION_Y-40,
                          arcade.color.WHITE, font_size=14, anchor_x="center", anchor_y="center")
 
     def check_click(self, x, y):
-        # Check if the click is within the button area
+        # verificare click - aria butonului
         if BUTTON_POSITION_X - BUTTON_WIDTH / 2 <= x <= BUTTON_POSITION_X + BUTTON_WIDTH / 2 \
                 and BUTTON_POSITION_Y - BUTTON_HEIGHT / 2 <= y <= BUTTON_POSITION_Y + BUTTON_HEIGHT / 2:
             self.is_clicked = True
@@ -228,22 +228,22 @@ class RuleButton:
         window_x = (SCREEN_WIDTH - window_width) / 2
         window_y = (SCREEN_HEIGHT - window_height) / 2
 
-        # Draw semi-transparent background rectangle covering the entire window
+        # semi-transparent fundal pe tot ecranul
         arcade.draw_rectangle_filled(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                      SCREEN_WIDTH, SCREEN_HEIGHT,
                                      (128, 128, 128,200))
 
-        # Draw rules window
+        # fereastră reguli
         arcade.draw_rectangle_filled(window_x + window_width / 2, window_y + window_height / 2,
                                      window_width, window_height,
                                      (124, 149, 149,255))  # Verde cu opacitate completă
 
-        # Draw rules text
+        # creare text pentru reguli
         for i, line in enumerate(RULES_TEXT):
             arcade.draw_text(line, window_x + window_width / 2, window_y + window_height - 20 - i * 20,
                              arcade.color.BLACK, font_size=12, anchor_x="center", anchor_y="center")
 
-        # Draw close button (X)
+        # buton de inchidere (X)
         close_button_size = 20
         close_button_x = window_x + window_width - close_button_size / 2 - 5
         close_button_y = window_y + window_height - close_button_size / 2 - 5
@@ -255,7 +255,7 @@ class RuleButton:
 
 class RestartButton:
     def __init__(self):
-        self.is_visible = True  # Restart button is always visible
+        self.is_visible = True  # intotdeauna vizibil
         self.is_clicked = False
         self.image = arcade.load_texture(":resources:onscreen_controls/flat_dark/r.png")
         self.position_x = BUTTON_POSITION_X
@@ -264,14 +264,14 @@ class RestartButton:
         self.height = BUTTON_HEIGHT
 
     def draw(self):
-        # Draw button rectangle
+        # creare buton
         arcade.draw_texture_rectangle( BUTTON_POSITION_X, BUTTON_POSITION_Y - BUTTON_HEIGHT - 120,
                                        BUTTON_WIDTH, BUTTON_HEIGHT, self.image)
         arcade.draw_text("RESTART", BUTTON_POSITION_X, BUTTON_POSITION_Y - BUTTON_HEIGHT - 160,
                          arcade.color.WHITE, font_size=14, anchor_x="center", anchor_y="center")
 
     def check_click(self, x, y):
-        # Check if the click is within the button area
+        # verificare click - in aria butonului
         if self.position_x - BUTTON_WIDTH / 2 <= x <= self.position_x + BUTTON_WIDTH / 2 \
                 and self.position_y - BUTTON_HEIGHT / 2 <= y <= self.position_y + BUTTON_HEIGHT / 2:
             self.is_clicked = True
@@ -764,7 +764,7 @@ class MyGame(arcade.Window):
         for card in self.card_list:
             # Pentru fiecare carte din lista de cărți
             if not self.is_card_in_top_pile(card):
-                # Verificăm dacă cartea nu este deja într-una dintre pilele de sus
+                # Verificăm dacă cartea nu este deja într-una dintre piloanele de sus
                 for pile_index in range(TOP_PILE_1, TOP_PILE_4 + 1):
                     # Încercăm să găsim o poziție validă în pilele de sus pentru această carte
                     if self.is_valid_move_to_top_pile(card, pile_index):
@@ -788,3 +788,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
