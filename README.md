@@ -1,10 +1,10 @@
-#Solitaire Clone
+## Solitaire Clone
 
-#Descriere
+## Descriere
 
 Acest proiect este o replică a jocului Solitaire, în care scopul este să așezi toate cărțile în ordine crescătoare pe cele patru pile de sus, respectând culoarea fiecărei suite.
 
-#Cum să joci
+## Cum să joci
 
 - Trage și plasează cărțile pentru a le muta.
 - Poți să muți doar cărți conform regulilor jocului.
@@ -12,7 +12,7 @@ Acest proiect este o replică a jocului Solitaire, în care scopul este să așe
 - Poți răsturna trei cărți din pachet o dată.
 - Apasă pe tasta 'R' pentru a restarta jocul.
 
-#Reguli
+## Reguli
 
 1. Trage și plasează cărțile pentru a le muta.
 2. Poți să muți doar cărți conform regulilor jocului.
@@ -20,12 +20,12 @@ Acest proiect este o replică a jocului Solitaire, în care scopul este să așe
 4. Poți răsturna trei cărți din pachet o dată.
 5. Apasă pe tasta 'R' pentru a restarta jocul.
 
-#Cerințe de sistem
+## Cerințe de sistem
 
 - Python 3.x
 - Arcade Library (poți instala folosind `pip install arcade`)
 
-Cum să rulezi
+## Cum să rulezi
 1. Clonează sau descarcă acest repository.
 2. Deschide terminalul și navighează la directorul proiectului.
 3. Rulează `python solitaire_clone.py`.
