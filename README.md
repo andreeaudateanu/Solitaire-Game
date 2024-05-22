@@ -1,4 +1,4 @@
-## Solitaire Clone
+# Solitaire Clone
 
 ## Descriere
 
